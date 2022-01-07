@@ -66,19 +66,19 @@ extension Reactive where Base: UITableView {
   private func _bindActions() -> Disposable {
     let tableView = base
     return CompositeDisposable(disposables: [
-      // Cell selections
-      modelSelected(CellViewModelWrapper.self)
-        .subscribe(onNext: { model in
-          (model.base as? SelectableType)?.onSelected?()
-        }),
-      
-      // Cell deletion
-      modelDeleted(CellViewModelWrapper.self)
-        .subscribe(onNext: { model in
-          guard let deletableModel = model.base as? DeletableType else { return }
-          deletableModel.onDeleted?()
-        }),
-      
+//      // Cell selections
+//      modelSelected(CellViewModelWrapper.self)
+//        .subscribe(onNext: { model in
+//          (model.base as? SelectableType)?.onSelected?()
+//        }),
+//
+//      // Cell deletion
+//      modelDeleted(CellViewModelWrapper.self)
+//        .subscribe(onNext: { model in
+//          guard let deletableModel = model.base as? DeletableType else { return }
+//          deletableModel.onDeleted?()
+//        }),
+//
       // Accessory selections
       itemAccessoryButtonTapped
         .subscribe(onNext: { indexPath in
@@ -91,6 +91,7 @@ extension Reactive where Base: UITableView {
       itemSelected
         .subscribe(onNext: { index in
           tableView.deselectRow(at: index, animated: true)
+          ((tableView.cellForRow(at: index) as? ModelledCell)?.cellModel as? SelectableType)?.onSelected?()
         })
     ])
   }
